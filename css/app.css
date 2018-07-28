@@ -1,0 +1,44 @@
+/* Start Form*/
+h2{
+    font-family: 'Raleway', sans-serif; 
+    font-weight: 900 ;
+    font-size: 50px ;
+    letter-spacing: -3px ;
+    color: #757575 ;
+    margin-top: 50px;
+}
+.contact-form{
+    max-width: 500px;
+    margin: auto;
+}
+
+.contact-form input,
+.contact-form textarea{
+    margin-bottom: 5px;
+}
+
+.contact-form textarea{
+    height: 180px !important;   
+}
+
+.contact-form input:not([type='submit']) + i{
+    height: 0;
+    float: left;
+    position: relative;
+    top: -32px;
+    color: #626b71;
+    left: 10px;
+}
+
+.contact-form input{
+    padding-left: 30px;
+}
+
+.contact-form .send{
+    display: block;
+    position: relative;
+    top: -32px;
+    left: 10px;
+    color: #FFF;
+
+}
