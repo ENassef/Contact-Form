@@ -1,21 +1,23 @@
 <?php
 
 // cheak if the user coming from A Request
-
+include 'Function/Function.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
-    $user      =  $_POST['Username'] ;
-    $email     =  $_POST['Email'] ;
-    $CellPhone =  $_POST['PhoneNumber'] ; 
-    $Message   =  $_POST['Message']; 
+    $user      =  filter_var($_POST['Username'], FILTER_SANITIZE_STRING) ;
+    $email     =  filter_var($_POST['Email'], FILTER_SANITIZE_EMAIL) ;
+    $CellPhone =  filter_var($_POST['PhoneNumber'], FILTER_SANITIZE_NUMBER_INT) ; 
+    $msg       =  filter_var($_POST['Message'], FILTER_SANITIZE_STRING); 
     
     // creating array of Errors
     
-    $FormErrors = array();
-    
     if(strlen($user) <= 3 ){
-        
-        $FormErrors[] = 'The Username Must be Larger than 3 Char  ';
+        /*Form Errors Var In The Function Page*/
+        $FormErrors[] = 'The Username Must be Larger than <strong> 3 </strong> Char';
+    }
+    if(strlen($msg) <= 10 ){
+        /*Form Errors Var In The Function Page*/
+        $FormErrors[] = 'The Message Must be Larger than <strong> 10 </strong> Char';
     }
 }
 
@@ -24,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Contact-Form</title>
+        <title>Contact-Us</title>
         <link rel="stylesheet" href="css/bootstrap.min.css" />
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">  
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,700,900,900i" >
@@ -39,53 +41,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         <!-- Start Form -->
         <div class="container">
-            <h2 class="text-center">Contact Me</h2>
-            <?php if(isset($FormErrors)){
-            foreach($FormErrors as $Error){
-                    echo $Error . '<br>' ;
-                  } }
-            ?>
-            <form class="contact-form" action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">        
-                <input type="text" 
-                       name="Username" 
-                       name='username' 
-                       class='form-control' 
-                       id="place1" 
-                       autocomplete="off"  
-                       placeholder="Username" />
+            <h2 class="text-center">Contact Us</h2>
+            <form class="contact-form" action="<?php echo $_SERVER['PHP_SELF']?>" method="POST"> 
+            <?php Errors($FormErrors) ?>
+                <div class="form-group">
+                <input type="text"
+                       name="Username"
+                       name='username'
+                       class='form-control username'
+                       id="place1"
+                       placeholder="Username" 
+                       autocomplete="off"
+                       value="<?php if(isset($user)){echo $user;}; ?>"
+                       />
                 
                 <i class="fas fa-user fa-fw"></i>
-                
+                <span class="asterisx">*</span>
+                    <div class="alert alert-danger custom-alert">
+                        The Username Must be Larger than <strong> 3 </strong> Char
+                    </div>
+                </div>
+                <div class="form-group">
                 <input 
                        type="Email" 
                        name="Email" 
                        id="place2" 
-                       class='form-control' 
-                       placeholder='Email' 
+                       class='form-control email' 
+                       placeholder='Email'
                        autocomplete="off"
+                       value="<?php if(isset($email)){echo $email;}; ?>"
                        />
                 
                 <i class="fas fa-envelope fa-fw"></i>
-
+                <span class="asterisx">*</span>
+                    <div class="alert alert-danger custom-alert">
+                        Email Can't be <strong>Empty</strong>
+                    </div>
+                </div>
+                <div class="form-group">
                 <input type="text" 
                        name="PhoneNumber" 
                        class='form-control' 
                        id="place3" 
                        name= 'CellPhone' 
                        placeholder='Your Phone Number' 
-                       autocomplete="off"/>
+                       autocomplete="off"
+                       value="<?php if(isset($CellPhone)){echo $CellPhone;}; ?>"/>
                 
-                <i class="fas fa-mobile-alt fa-fw"></i> 
-                
+                <i class="fas fa-mobile-alt fa-fw"></i>
+                </div>
+                <div class="form-group">
                 <textarea 
                           class="form-control place" 
                           id="place4" 
                           placeholder='Type Your Message' 
-                          name="Message"></textarea>
-                
-                <input type='submit' value="Send Message" class="btn btn-success" />
-                
+                          name="Message"><?php if(isset($msg)){echo $msg;}; ?></textarea>
+                <div class="alert alert-danger custom-alert">
+                        The Message Must be Larger than <strong> 10 </strong> Char
+                </div>
+                </div>
+                <input type='submit' value="Send Message" class="btn btn-success" id="msg" disabled />
                 <i class="fas fa-paper-plane send"></i>
+               
                 
             </form>
             
